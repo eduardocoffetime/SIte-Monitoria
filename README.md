@@ -13,6 +13,7 @@ Plataforma desenvolvida com **Ember**,**Benjamin** e **Daniel** para centralizar
 - Agendamento e atendimento aos alunos.
 
 contatos sobre o projeto: 
+
 -cl.danielricardo@gmail.com ou no ig: d.cardosso_
 
 -eduardo.nascimento1@aluno.ifsp.edu.br
