@@ -11,3 +11,8 @@ Plataforma desenvolvida com **Ember**,**Benjamin** e **Daniel** para centralizar
 - Centralização de horários e locais de monitoria.
 - Cadastro e gestão de monitores e disciplinas.
 - Agendamento e atendimento aos alunos.
+
+contatos sobre o projeto: 
+-cl.danielricardo@gmail.com ou no ig: d.cardosso_
+-eduardo.nascimento1@aluno.ifsp.edu.br
+-benjaminyoshida98@gmail.com
