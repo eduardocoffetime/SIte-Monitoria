@@ -24,13 +24,15 @@
             
               <!-- Matéria -->
             <div class="form-group">
-                <label for="Nome">Nome</label>
-                <textarea 
+                <label for="nomeMonitor">Nome</label>
+                <input 
+                    type="text" 
                     id="nomeMonitor" 
                     name="nomeMonitor"
                     placeholder="Nome do Monitor" required
-                    maxlength="100"
-                ></textarea>
+                    maxlength="60"
+                    minlength="3"
+                />
             </div>
             
             
@@ -60,7 +62,10 @@
                         id="senha" 
                         name="senha"
                         placeholder="********" required
+                        minlength="6"
                         maxlength="100"
+                        pattern="(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{6,}"
+                        title="A senha deve ter pelo menos 6 caracteres, uma letra maiúscula e um caractere especial."
                     />
 
 
@@ -90,126 +95,109 @@
     </div>
 
     <script>
-        // ========================================
-        // CONFIGURAÇÃO
-        // ========================================
         const API_URL = 'http://10.124.75.2:8080/api/v1';
 
-        // ========================================
-        // ELEMENTOS DO DOM
-        // ========================================
-        const form = document.getElementById('formProduto');
+        const form = document.getElementById('formMonitor');
         const mensagem = document.getElementById('mensagem');
         const btnEnviar = document.getElementById('btnEnviar');
-        const selectCategoria = document.getElementById('categoriaId');
+        const selectArea = document.getElementById('areaId');
 
-        // ========================================
-        // MOSTRAR MENSAGEM
-        // ========================================
         function mostrarMensagem(texto, tipo = 'sucesso') {
             mensagem.textContent = texto;
             mensagem.className = `mensagem ${tipo}`;
 
-            // Esconde automaticamente após 5 segundos (exceto erro)
             if (tipo !== 'erro') {
                 setTimeout(() => {
                     mensagem.className = 'mensagem';
                 }, 5000);
             }
         }
+// Validação da Senha
+        function validarSenha(senha) {
+            if (senha.length < 6) {
+                return 'A senha deve ter no mínimo 6 caracteres.';
+            }
 
-        // ========================================
-        // CARREGAR CATEGORIAS NO SELECT
-        // ========================================
-        async function carregarCategorias() {
+            if (!/[A-Z]/.test(senha)) {
+                return 'A senha deve conter pelo menos uma letra maiúscula.';
+            }
+
+            if (!/[^A-Za-z0-9]/.test(senha)) {
+                return 'A senha deve conter pelo menos um caractere especial.';
+            }
+
+            return '';
+        }
+
+        async function carregarAreas() {
             try {
-                const resposta = await fetch(`${API_URL}/categorias/ativas`);
+                const resposta = await fetch(`${API_URL}/areas/ativas`);
 
                 if (!resposta.ok) {
                     throw new Error(`HTTP ${resposta.status}`);
                 }
 
-                const categorias = await resposta.json();
+                const areas = await resposta.json();
 
-                // Limpa o select
-                selectCategoria.innerHTML = '<option value="">Selecione uma categoria</option>';
+                selectArea.innerHTML = '<option value="">Selecione a área</option>';
 
-                // Adiciona as categorias
-                categorias.forEach(cat => {
+                areas.forEach(area => {
                     const option = document.createElement('option');
-                    option.value = cat.id;
-                    option.textContent = `${cat.icone || '📦'} ${cat.nome}`;
-                    selectCategoria.appendChild(option);
+                    option.value = area.id;
+                    option.textContent = area.nome;
+                    selectArea.appendChild(option);
                 });
 
-                console.log(`✅ ${categorias.length} categorias carregadas`);
-
+                console.log(`✅ ${areas.length} áreas carregadas`);
             } catch (erro) {
-                console.error('❌ Erro ao carregar categorias:', erro);
-                selectCategoria.innerHTML = '<option value="">❌ Erro ao carregar categorias</option>';
-                mostrarMensagem('Erro ao carregar categorias. Verifique se o back-end está rodando.', 'erro');
+                console.error('❌ Erro ao carregar áreas:', erro);
+                selectArea.innerHTML = '<option value="">❌ Erro ao carregar áreas</option>';
+                mostrarMensagem('Erro ao carregar áreas. Verifique se o back-end está rodando.', 'erro');
             }
         }
 
-        // ========================================
-        // ENVIAR FORMULÁRIO (POST)
-        // ========================================
         form.addEventListener('submit', async (evento) => {
-            evento.preventDefault(); // Não recarrega a página
+            evento.preventDefault();
 
-            // Desabilita o botão
+            const nome = document.getElementById('nomeMonitor').value.trim();
+            const email = document.getElementById('emailMonitor').value.trim();
+            const senha = document.getElementById('senha').value;
+            const areaId = document.getElementById('areaId').value;
+            const erroSenha = validarSenha(senha);
+
+            if (!nome) {
+                mostrarMensagem('O nome do monitor é obrigatório.', 'erro');
+                return;
+            }
+
+            if (!email) {
+                mostrarMensagem('O email é obrigatório.', 'erro');
+                return;
+            }
+
+            if (erroSenha) {
+                mostrarMensagem(erroSenha, 'erro');
+                document.getElementById('senha').focus();
+                return;
+            }
+
+            if (!areaId) {
+                mostrarMensagem('Selecione uma área.', 'erro');
+                return;
+            }
+
             btnEnviar.disabled = true;
-            btnEnviar.innerHTML = '<span class="spinner"></span> Cadastrando...';
+            btnEnviar.innerHTML = '⏳ Cadastrando...';
 
             try {
-                // ========================================
-                // MONTA O OBJETO COM OS DADOS
-                // ========================================
                 const dados = {
-                    nome: document.getElementById('nome').value.trim(),
-                    descricao: document.getElementById('descricao').value.trim() || null,
-                    preco: parseFloat(document.getElementById('preco').value),
-                    precoPromocional: document.getElementById('precoPromocional').value 
-                        ? parseFloat(document.getElementById('precoPromocional').value) 
-                        : null,
-                    tempoPreparo: parseInt(document.getElementById('tempoPreparo').value),
-                    categoriaId: parseInt(document.getElementById('categoriaId').value),
-                    ingredientes: document.getElementById('ingredientes').value.trim() || null,
-                    peso: document.getElementById('peso').value.trim() || null,
-                    imagem: document.getElementById('imagem').value.trim() || null,
-                    destaque: document.getElementById('destaque').checked,
-                    disponivel: document.getElementById('disponivel').checked
+                    nome,
+                    email,
+                    senha,
+                    areaId: Number(areaId)
                 };
 
-                // ========================================
-                // VALIDAÇÕES
-                // ========================================
-                if (!dados.nome) {
-                    throw new Error('O nome do produto é obrigatório');
-                }
-
-                if (!dados.preco || dados.preco <= 0) {
-                    throw new Error('O preço deve ser maior que zero');
-                }
-
-                if (!dados.tempoPreparo || dados.tempoPreparo <= 0) {
-                    throw new Error('O tempo de preparo deve ser maior que zero');
-                }
-
-                if (!dados.categoriaId) {
-                    throw new Error('Selecione uma categoria');
-                }
-
-                if (dados.precoPromocional && dados.precoPromocional >= dados.preco) {
-                    throw new Error('O preço promocional deve ser menor que o preço normal');
-                }
-
-                console.log('📤 Enviando dados:', dados);
-
-                // ========================================
-                // FAZ O POST PARA A API
-                // ========================================
-                const resposta = await fetch(`${API_URL}/produtos`, {
+                const resposta = await fetch(`${API_URL}/monitores`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -217,13 +205,9 @@
                     body: JSON.stringify(dados)
                 });
 
-                // ========================================
-                // TRATA A RESPOSTA
-                // ========================================
                 if (!resposta.ok) {
-                    // Tenta pegar a mensagem de erro do back-end
                     let mensagemErro = `Erro HTTP ${resposta.status}`;
-                    
+
                     try {
                         const erroData = await resposta.json();
                         if (erroData.message) {
@@ -232,56 +216,32 @@
                             mensagemErro = Object.values(erroData.errors).join(', ');
                         }
                     } catch (e) {
-                        // Ignora se não conseguir ler o JSON
+                        // Ignora erro de JSON diferente
                     }
-                    
+
                     throw new Error(mensagemErro);
                 }
 
-                const produtoCriado = await resposta.json();
-                console.log('✅ Produto criado:', produtoCriado);
-
-                // ========================================
-                // SUCESSO!
-                // ========================================
-                mostrarMensagem(
-                    `✅ Produto "${produtoCriado.nome}" cadastrado com sucesso! (ID: ${produtoCriado.id})`,
-                    'sucesso'
-                );
-
-                // Limpa o formulário (mantém disponível marcado)
+                const monitorCriado = await resposta.json();
+                mostrarMensagem(`✅ Monitor "${monitorCriado.nome || nome}" cadastrado com sucesso!`, 'sucesso');
                 limparFormulario();
-
             } catch (erro) {
-                console.error('❌ Erro:', erro);
+                console.error('❌ Erro no cadastro:', erro);
                 mostrarMensagem(`❌ ${erro.message}`, 'erro');
             } finally {
-                // Reabilita o botão
                 btnEnviar.disabled = false;
-                btnEnviar.innerHTML = '💾 Cadastrar Produto';
+                btnEnviar.innerHTML = '💾 Cadastrar Monitor';
             }
         });
 
-        // ========================================
-        // LIMPAR FORMULÁRIO
-        // ========================================
         function limparFormulario() {
             form.reset();
-            
-            // Mantém "disponível" marcado por padrão
-            document.getElementById('disponivel').checked = true;
-            document.getElementById('destaque').checked = false;
-            
-            // Foca no primeiro campo
-            document.getElementById('nome').focus();
+            document.getElementById('nomeMonitor').focus();
         }
 
-        // ========================================
-        // INICIALIZAÇÃO
-        // ========================================
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('🍰 Cadastro de Produtos iniciado');
-            carregarCategorias();
+            console.log('✅ Cadastro de monitor iniciado');
+            carregarAreas();
         });
     </script>
 </body>
