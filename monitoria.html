@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/monitoria.css">
+    <title>Monitora+ | Matérias</title>
+</head>
+<body>
+    <main class="pagina-monitoria">
+        <header class="topo">
+            <a class="marca" href="monitoria.html">
+                <span class="marca-simbolo">M+</span>
+                <span>Monitora<span class="marca-destaque">+</span></span>
+            </a>
+            <span class="perfil-label">Área do estudante</span>
+        </header>
+
+        <section class="intro">
+            <div>
+                <span class="sobretitulo">Encontre seu próximo encontro</span>
+                <h1>Matérias disponíveis</h1>
+                <p>Escolha uma matéria para agendar uma monitoria.</p>
+            </div>
+            <span class="aviso-demo">Matérias demonstrativas</span>
+        </section>
+
+        <section class="grupo-materias">
+            <div class="grupo-cabecalho">
+                <div>
+                    <span class="grupo-indice">01 / CURSO</span>
+                    <h2>Matérias técnicas</h2>
+                </div>
+                <span class="grupo-contagem">04 matérias</span>
+            </div>
+            <div class="grade-materias">
+                <article class="materia-card">
+                    <span class="materia-numero">T-01</span>
+                    <span class="materia-tag tag-tecnica">Informatica</span>
+                    <h3>Programação Web</h3>
+                    <p>HTML, CSS e fundamentos de JavaScript</p>
+                    <button class="botao-agendar" type="button" data-materia="Programação Web">Agendar monitoria <span>&#8599;</span></button>
+                </article>
+                <article class="materia-card">
+                    <span class="materia-numero">T-02</span>
+                    <span class="materia-tag tag-tecnica">Informatica</span>
+                    <h3>Banco de Dados</h3>
+                    <p>Modelagem, SQL e organização de dados</p>
+                    <button class="botao-agendar" type="button" data-materia="Banco de Dados">Agendar monitoria <span>&#8599;</span></button>
+                </article>
+                <article class="materia-card">
+                    <span class="materia-numero">T-03</span>
+                    <span class="materia-tag tag-tecnica">Informatica</span>
+                    <h3>Redes de Computadores</h3>
+                    <p>Conceitos de redes, protocolos e serviços</p>
+                    <button class="botao-agendar" type="button" data-materia="Redes de Computadores">Agendar monitoria <span>&#8599;</span></button>
+                </article>
+                <article class="materia-card">
+                    <span class="materia-numero">T-04</span>
+                    <span class="materia-tag tag-tecnica">Informatica</span>
+                    <h3>Lógica de Programação</h3>
+                    <p>Algoritmos, condições e estruturas de repetição</p>
+                    <button class="botao-agendar" type="button" data-materia="Lógica de Programação">Agendar monitoria <span>&#8599;</span></button>
+                </article>
+            </div>
+        </section>
+
+        <section class="grupo-materias grupo-comuns">
+            <div class="grupo-cabecalho">
+                <div>
+                    <span class="grupo-indice">02 / BASE</span>
+                    <h2>Matérias comuns</h2>
+                </div>
+                <span class="grupo-contagem">04 matérias</span>
+            </div>
+            <div class="grade-materias">
+                <article class="materia-card">
+                    <span class="materia-numero">C-01</span>
+                    <span class="materia-tag tag-comum">Exatas</span>
+                    <h3>Matemática</h3>
+                    <p>Álgebra, funções e resolução de problemas</p>
+                    <button class="botao-agendar" type="button" data-materia="Matemática">Agendar monitoria <span>&#8599;</span></button>
+                </article>
+                <article class="materia-card">
+                    <span class="materia-numero">C-02</span>
+                    <span class="materia-tag tag-comum">Linguagens</span>
+                    <h3>Língua Portuguesa</h3>
+                    <p>Interpretação de texto e produção escrita</p>
+                    <button class="botao-agendar" type="button" data-materia="Língua Portuguesa">Agendar monitoria <span>&#8599;</span></button>
+                </article>
+                <article class="materia-card">
+                    <span class="materia-numero">C-03</span>
+                    <span class="materia-tag tag-comum">Ciências</span>
+                    <h3>Física</h3>
+                    <p>Mecânica, energia e conceitos fundamentais</p>
+                    <button class="botao-agendar" type="button" data-materia="Física">Agendar monitoria <span>&#8599;</span></button>
+                </article>
+                <article class="materia-card">
+                    <span class="materia-numero">C-04</span>
+                    <span class="materia-tag tag-comum">Humanas</span>
+                    <h3>História</h3>
+                    <p>Contextos históricos e sociedade</p>
+                    <button class="botao-agendar" type="button" data-materia="História">Agendar monitoria <span>&#8599;</span></button>
+                </article>
+            </div>
+        </section>
+
+        <footer class="rodape">Monitora+ <span>·</span> Aprender em conjunto</footer>
+    </main>
+
+    <dialog class="modal-agendamento">
+        <form id="formAgendamento" class="modal-conteudo">
+            <button class="modal-fechar" type="button">&times;</button>
+            <span class="sobretitulo">Novo encontro</span>
+            <h2>Agendar monitoria</h2>
+            <p class="modal-materia" id="materiaSelecionada"></p>
+            <label for="dataAgendamento">Data</label>
+            <input id="dataAgendamento" name="data" type="date" required>
+            <label for="horaAgendamento">Horário</label>
+            <input id="horaAgendamento" name="hora" type="time" required>
+            <p class="nota-local">Este agendamento é apenas uma demonstração e não será salvo.</p>
+            <button class="botao-confirmar" type="submit">Confirmar agendamento</button>
+        </form>
+    </dialog>
+    <div class="notificacao"></div>
+   
+    <script>
+        const janela = document.querySelector('.modal-agendamento');
+        const formulario = document.getElementById('formAgendamento');
+        const materia = document.getElementById('materiaSelecionada');
+        const campoData = document.getElementById('dataAgendamento');
+        const mensagem = document.querySelector('.notificacao');
+        let botaoEscolhido;
+
+        const hoje = new Date();
+        campoData.min = new Date(hoje.getTime() - hoje.getTimezoneOffset() * 60000)
+            .toISOString()
+            .slice(0, 10);
+
+        document.querySelectorAll('.botao-agendar').forEach((botao) => {
+            botao.addEventListener('click', () => {
+                botaoEscolhido = botao;
+                materia.textContent = botao.dataset.materia;
+                formulario.reset();
+                janela.showModal();
+            });
+        });
+
+        document.querySelector('.modal-fechar').addEventListener('click', () => janela.close());
+
+        formulario.addEventListener('submit', (envio) => {
+            envio.preventDefault();
+            const dataAgendada = new Date(`${campoData.value}T${formulario.elements.hora.value}`);
+            const dataFormatada = new Intl.DateTimeFormat('pt-BR', {
+                dateStyle: 'short',
+                timeStyle: 'short'
+            }).format(dataAgendada);
+
+            botaoEscolhido.textContent = `Agendada · ${dataFormatada}`;
+            botaoEscolhido.classList.add('agendada');
+            botaoEscolhido.disabled = true;
+            janela.close();
+            mensagem.textContent = `Monitoria de ${materia.textContent} agendada para ${dataFormatada}.`;
+            mensagem.classList.add('visivel');
+            window.setTimeout(() => mensagem.classList.remove('visivel'), 4000);
+        });
+    </script>
+</body>
+</html>
