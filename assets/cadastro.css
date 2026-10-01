@@ -48,6 +48,19 @@ body {
     font-size: 0.98rem;
 }
 
+.link-listagem {
+    display: inline-block;
+    margin-top: 12px;
+    color: #c2410c;
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.link-listagem:hover {
+    text-decoration: underline;
+}
+
 .cadastro-form {
     display: flex;
     flex-direction: column;
@@ -101,6 +114,87 @@ body {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
+}
+
+.atendimento {
+    padding: 18px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #f8fafc;
+}
+
+.atendimento-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.atendimento-header h2 {
+    margin-bottom: 4px;
+    color: #1f2937;
+    font-size: 1.05rem;
+}
+
+.atendimento-header p {
+    color: #64748b;
+    font-size: 0.86rem;
+}
+
+.horarios-lista {
+    display: grid;
+    gap: 10px;
+}
+
+.horario-linha {
+    display: grid;
+    grid-template-columns: minmax(170px, 1.4fr) repeat(2, minmax(110px, 0.7fr)) auto;
+    align-items: end;
+    gap: 12px;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.horario-campo {
+    display: grid;
+    gap: 6px;
+    color: #475569;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.horario-campo input,
+.horario-campo select {
+    min-width: 0;
+    padding: 9px 10px;
+    border: 1px solid #dbe2ea;
+    border-radius: 8px;
+    background: #fff;
+    color: #0f172a;
+    font: inherit;
+}
+
+.btn-adicionar,
+.btn-remover {
+    min-height: 40px;
+    padding: 8px 12px;
+    border: 1px solid #fdba74;
+    border-radius: 8px;
+    background: #fff7ed;
+    color: #9a3412;
+    font: inherit;
+    font-size: 0.86rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-remover {
+    border-color: #fecaca;
+    background: #fff;
+    color: #b91c1c;
 }
 
 .checkbox-group {
@@ -209,6 +303,23 @@ body {
     .btn-group {
         grid-template-columns: 1fr;
         display: grid;
+    }
+
+    .atendimento-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .horario-linha {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .horario-campo:first-child {
+        grid-column: 1 / -1;
+    }
+
+    .btn-remover {
+        grid-column: 1 / -1;
     }
 
     .btn-secondary,

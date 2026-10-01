@@ -14,234 +14,236 @@
                 <span class="cadastro-badge">Cadastro</span>
                 <h1>Monitora+ | Cadastro Monitor</h1>
                 <p class="subtitle">Preencha os dados do monitor para cadastrá-lo.</p>
+                <a class="link-listagem" href="listagemMonitor.html">Ver lista de monitores</a>
             </div>
 
             <!-- Área de mensagens -->
             <div id="mensagem" class="mensagem"></div>
 
-            <!-- Formulário -->
             <form id="formMonitor" class="cadastro-form">
-            
-              <!-- Matéria -->
-            <div class="form-group">
-                <label for="nomeMonitor">Nome</label>
-                <input 
-                    type="text" 
-                    id="nomeMonitor" 
-                    name="nomeMonitor"
-                    placeholder="Nome do Monitor" required
-                    maxlength="60"
-                    minlength="3"
-                />
-            </div>
-            
-            
-                <!-- email -->
-            <div class="form-group">
-                <label for="nome">
-                    Email Monitor <span class="required">*</span>
-                </label>
-                <input 
-                    type="email" 
-                    id="emailMonitor" 
-                    name="emailMonitor"
-                    placeholder="seu@gmail.com" required
-                    maxlength="150"
-                />
-            </div>
-
-          
-
-            <div class="senha">
-                <div class="form-group">
-                    <label for="senha">
-                        Senha <span class="required">*</span>
-                    </label>
-                    <input 
-                        type="password" 
-                        id="senha" 
-                        name="senha"
-                        placeholder="********" required
-                        minlength="6"
-                        maxlength="100"
-                        pattern="(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{6,}"
-                        title="A senha deve ter pelo menos 6 caracteres, uma letra maiúscula e um caractere especial."
-                    />
-
-
-
-
-                <div class="form-group">
-                    <label for="area">
-                        Área <span class="required">*</span>
-                    </label>
-                    <select id="areaId" name="areaId" required>
-                        <option value="">Carregando áreas...</option>
-                    </select>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nomeMonitor">Nome <span class="required">*</span></label>
+                        <input type="text" id="nomeMonitor" name="nome" placeholder="Nome do monitor" required maxlength="60" minlength="3">
+                    </div>
+                    <div class="form-group">
+                        <label for="emailMonitor">Email <span class="required">*</span></label>
+                        <input type="email" id="emailMonitor" name="email" placeholder="monitor@escola.edu.br" required maxlength="150">
+                    </div>
                 </div>
-            </div>
 
-            <!-- BOTÕES -->
-            <div class="btn-group">
-                <button type="button" class="btn-secondary" onclick="limparFormulario()">
-                    🗑️ Limpar
-                </button>
-                <button type="submit" class="btn-primary" id="btnEnviar">
-                    💾 Cadastrar Monitor
-                </button>
-            </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="telefoneMonitor">Telefone <span class="required">*</span></label>
+                        <input type="tel" id="telefoneMonitor" name="telefone" placeholder="(11) 99999-9999" autocomplete="tel" required maxlength="20">
+                    </div>
+                    <div class="form-group">
+                        <label for="senha">Senha <span class="required">*</span></label>
+                        <input type="password" id="senha" name="senha" placeholder="Mínimo 6 caracteres" required minlength="6" maxlength="100" pattern="(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{6,}" title="A senha deve ter pelo menos 6 caracteres, uma letra maiúscula e um caractere especial.">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="areaId">Área <span class="required">*</span></label>
+                        <select id="areaId" name="areaId" required>
+                            <option value="">Carregando áreas...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="disciplinaId">Disciplina <span class="required">*</span></label>
+                        <select id="disciplinaId" name="disciplinaId" required>
+                            <option value="">Carregando disciplinas...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <section class="atendimento" aria-labelledby="tituloAtendimento">
+                    <div class="atendimento-header">
+                        <div>
+                            <h2 id="tituloAtendimento">Horários de atendimento</h2>
+                            <p>Informe o dia e o intervalo de cada monitoria.</p>
+                        </div>
+                        <button type="button" class="btn-adicionar" id="adicionarHorario">+ Adicionar horário</button>
+                    </div>
+                    <div id="horarios" class="horarios-lista"></div>
+                </section>
+
+                <div class="btn-group">
+                    <button type="button" class="btn-secondary" id="limparFormulario">Limpar</button>
+                    <button type="submit" class="btn-primary" id="btnEnviar">Cadastrar monitor</button>
+                </div>
             </form>
         </div>
     </div>
     <script>
         const API_URL = 'http://10.124.75.2:8080/api/v1';
-
+        const CHAVE_MONITORES = 'monitora-monitores';
         const form = document.getElementById('formMonitor');
         const mensagem = document.getElementById('mensagem');
         const btnEnviar = document.getElementById('btnEnviar');
         const selectArea = document.getElementById('areaId');
+        const selectDisciplina = document.getElementById('disciplinaId');
+        const horarios = document.getElementById('horarios');
+        const diasSemana = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'];
 
         function mostrarMensagem(texto, tipo = 'sucesso') {
             mensagem.textContent = texto;
             mensagem.className = `mensagem ${tipo}`;
-
-            if (tipo !== 'erro') {
-                setTimeout(() => {
-                    mensagem.className = 'mensagem';
-                }, 5000);
-            }
+            if (tipo !== 'erro') window.setTimeout(() => mensagem.className = 'mensagem', 5000);
         }
-// Validação da Senha
+
         function validarSenha(senha) {
-            if (senha.length < 6) {
-                return 'A senha deve ter no mínimo 6 caracteres.';
-            }
-
-            if (!/[A-Z]/.test(senha)) {
-                return 'A senha deve conter pelo menos uma letra maiúscula.';
-            }
-
-            if (!/[^A-Za-z0-9]/.test(senha)) {
-                return 'A senha deve conter pelo menos um caractere especial.';
-            }
-
+            if (senha.length < 6) return 'A senha deve ter no mínimo 6 caracteres.';
+            if (!/[A-Z]/.test(senha)) return 'A senha deve conter pelo menos uma letra maiúscula.';
+            if (!/[^A-Za-z0-9]/.test(senha)) return 'A senha deve conter pelo menos um caractere especial.';
             return '';
         }
 
-        async function carregarAreas() {
+        async function carregarOpcoes(url, select, rotulo) {
             try {
-                const resposta = await fetch(`${API_URL}/areas/ativas`);
-
-                if (!resposta.ok) {
-                    throw new Error(`HTTP ${resposta.status}`);
-                }
-
-                const areas = await resposta.json();
-
-                selectArea.innerHTML = '<option value="">Selecione a área</option>';
-
-                areas.forEach(area => {
+                const resposta = await fetch(`${API_URL}/${url}`);
+                if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
+                const itens = await resposta.json();
+                select.innerHTML = `<option value="">Selecione ${rotulo}</option>`;
+                itens.forEach((item) => {
                     const option = document.createElement('option');
-                    option.value = area.id;
-                    option.textContent = area.nome;
-                    selectArea.appendChild(option);
+                    option.value = item.id;
+                    option.textContent = item.nome;
+                    select.appendChild(option);
                 });
-
-                console.log(`✅ ${areas.length} áreas carregadas`);
+                if (!itens.length) select.innerHTML = `<option value="">Nenhuma opção cadastrada</option>`;
             } catch (erro) {
-                console.error('❌ Erro ao carregar áreas:', erro);
-                selectArea.innerHTML = '<option value="">❌ Erro ao carregar áreas</option>';
-                mostrarMensagem('Erro ao carregar áreas. Verifique se o back-end está rodando.', 'erro');
+                console.error(`Erro ao carregar ${rotulo}:`, erro);
+                select.innerHTML = `<option value="">Não foi possível carregar ${rotulo}</option>`;
+                mostrarMensagem(`Erro ao carregar ${rotulo}. Verifique se o back-end está disponível.`, 'erro');
             }
         }
 
+        function adicionarHorario() {
+            const linha = document.createElement('div');
+            linha.className = 'horario-linha';
+            linha.innerHTML = `
+                <label class="horario-campo">Dia
+                    <select name="diaAtendimento" required>
+                        <option value="">Selecione</option>
+                        ${diasSemana.map((dia) => `<option value="${dia}">${dia}</option>`).join('')}
+                    </select>
+                </label>
+                <label class="horario-campo">Das
+                    <input type="time" name="inicioAtendimento" required>
+                </label>
+                <label class="horario-campo">Até
+                    <input type="time" name="fimAtendimento" required>
+                </label>
+                <button type="button" class="btn-remover" aria-label="Remover horário" title="Remover horário">Remover</button>`;
+            linha.querySelector('.btn-remover').addEventListener('click', () => {
+                linha.remove();
+                if (!horarios.children.length) adicionarHorario();
+            });
+            horarios.appendChild(linha);
+        }
+
+        function lerMonitoresLocais() {
+            try {
+                return JSON.parse(localStorage.getItem(CHAVE_MONITORES) || '[]');
+            } catch {
+                return [];
+            }
+        }
+
+        function salvarMonitorLocal(monitor) {
+            const monitores = lerMonitoresLocais();
+            monitores.push(monitor);
+            localStorage.setItem(CHAVE_MONITORES, JSON.stringify(monitores));
+        }
+
+        document.getElementById('adicionarHorario').addEventListener('click', adicionarHorario);
+        document.getElementById('limparFormulario').addEventListener('click', () => {
+            form.reset();
+            horarios.innerHTML = '';
+            adicionarHorario();
+            document.getElementById('nomeMonitor').focus();
+        });
+
         form.addEventListener('submit', async (evento) => {
             evento.preventDefault();
-
             const nome = document.getElementById('nomeMonitor').value.trim();
             const email = document.getElementById('emailMonitor').value.trim();
+            const telefone = document.getElementById('telefoneMonitor').value.trim();
             const senha = document.getElementById('senha').value;
-            const areaId = document.getElementById('areaId').value;
+            const area = selectArea.selectedOptions[0];
+            const disciplina = selectDisciplina.selectedOptions[0];
             const erroSenha = validarSenha(senha);
-
-            if (!nome) {
-                mostrarMensagem('O nome do monitor é obrigatório.', 'erro');
-                return;
-            }
-
-            if (!email) {
-                mostrarMensagem('O email é obrigatório.', 'erro');
-                return;
-            }
+            const atendimentos = [...horarios.querySelectorAll('.horario-linha')].map((linha) => ({
+                dia: linha.querySelector('[name="diaAtendimento"]').value,
+                inicio: linha.querySelector('[name="inicioAtendimento"]').value,
+                fim: linha.querySelector('[name="fimAtendimento"]').value
+            }));
 
             if (erroSenha) {
                 mostrarMensagem(erroSenha, 'erro');
                 document.getElementById('senha').focus();
                 return;
             }
-
-            if (!areaId) {
-                mostrarMensagem('Selecione uma área.', 'erro');
+            if (atendimentos.some((horario) => horario.inicio >= horario.fim)) {
+                mostrarMensagem('O horário final deve ser posterior ao horário inicial.', 'erro');
                 return;
             }
 
+            const atendimento = atendimentos.map((horario) => `${horario.dia}: ${horario.inicio} às ${horario.fim}`).join('; ');
+            const dados = {
+                nome,
+                email,
+                senha,
+                telefone,
+                areaId: Number(area.value),
+                disciplinaId: Number(disciplina.value),
+                atendimento
+            };
             btnEnviar.disabled = true;
-            btnEnviar.innerHTML = '⏳ Cadastrando...';
+            btnEnviar.textContent = 'Cadastrando...';
 
             try {
-                const dados = {
-                    nome,
-                    email,
-                    senha,
-                    areaId: Number(areaId)
-                };
-
                 const resposta = await fetch(`${API_URL}/monitores`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(dados)
                 });
-
                 if (!resposta.ok) {
-                    let mensagemErro = `Erro HTTP ${resposta.status}`;
-
+                    let erroServidor = `Erro HTTP ${resposta.status}`;
                     try {
                         const erroData = await resposta.json();
-                        if (erroData.message) {
-                            mensagemErro = erroData.message;
-                        } else if (erroData.errors) {
-                            mensagemErro = Object.values(erroData.errors).join(', ');
-                        }
-                    } catch (e) {
-                        // Ignora erro de JSON diferente
-                    }
-
-                    throw new Error(mensagemErro);
+                        erroServidor = erroData.message || (erroData.errors && Object.values(erroData.errors).join(', ')) || erroServidor;
+                    } catch {}
+                    throw new Error(erroServidor);
                 }
-
                 const monitorCriado = await resposta.json();
-                mostrarMensagem(`✅ Monitor "${monitorCriado.nome || nome}" cadastrado com sucesso!`, 'sucesso');
-                limparFormulario();
+                salvarMonitorLocal({
+                    id: monitorCriado.id || Date.now(),
+                    nome,
+                    email,
+                    telefone,
+                    area: area.textContent,
+                    disciplina: disciplina.textContent,
+                    atendimento
+                });
+                mostrarMensagem(`Monitor "${monitorCriado.nome || nome}" cadastrado com sucesso!`, 'sucesso');
+                form.reset();
+                horarios.innerHTML = '';
+                adicionarHorario();
             } catch (erro) {
-                console.error('❌ Erro no cadastro:', erro);
-                mostrarMensagem(`❌ ${erro.message}`, 'erro');
+                console.error('Erro no cadastro:', erro);
+                mostrarMensagem(erro.message, 'erro');
             } finally {
                 btnEnviar.disabled = false;
-                btnEnviar.innerHTML = '💾 Cadastrar Monitor';
+                btnEnviar.textContent = 'Cadastrar monitor';
             }
         });
 
-        function limparFormulario() {
-            form.reset();
-            document.getElementById('nomeMonitor').focus();
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log('✅ Cadastro de monitor iniciado');
-            carregarAreas();
-        });
+        carregarOpcoes('areas/ativas', selectArea, 'uma área');
+        carregarOpcoes('disciplinas/ativas', selectDisciplina, 'uma disciplina');
+        adicionarHorario();
     </script>
 </body>
 </html>

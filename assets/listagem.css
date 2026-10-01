@@ -1,0 +1,274 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    color-scheme: light;
+    --ink: #1f2937;
+    --muted: #64748b;
+    --line: #e2e8f0;
+    --orange: #f97316;
+}
+
+body {
+    min-height: 100vh;
+    padding: 0 28px 24px;
+    background: linear-gradient(135deg, #1d1b29 0%, #271db8 100%);
+    color: var(--ink);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+    outline: 3px solid #fbbf24;
+    outline-offset: 3px;
+}
+
+.pagina-monitores {
+    width: min(100%, 1280px);
+    margin: 0 auto;
+}
+
+.topo {
+    min-height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.marca {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-size: 1.13rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.marca-simbolo {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    border-radius: 8px;
+    background: var(--orange);
+    color: #fff;
+    font-size: 0.85rem;
+}
+
+.marca-destaque {
+    color: #fdba74;
+}
+
+.link-cadastro {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 40px;
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.link-cadastro span {
+    color: #fdba74;
+    font-size: 1.15rem;
+}
+
+.intro {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 46px 0 30px;
+    color: #fff;
+}
+
+.sobretitulo {
+    display: block;
+    margin-bottom: 9px;
+    color: #fdba74;
+    font-size: 0.73rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.intro h1 {
+    margin-bottom: 7px;
+    font-size: 2.1rem;
+    line-height: 1.15;
+}
+
+.intro p {
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 0.98rem;
+}
+
+.botao-atualizar {
+    min-height: 40px;
+    padding: 9px 13px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--orange);
+    color: #fff;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.painel-listagem {
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 18px 44px rgba(15, 23, 42, 0.16);
+}
+
+.barra-listagem {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--line);
+}
+
+.busca-label {
+    color: #475569;
+    font-size: 0.86rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.barra-listagem input {
+    width: min(100%, 340px);
+    min-height: 40px;
+    padding: 9px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    color: var(--ink);
+}
+
+.contagem {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.tabela-rolagem {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+th,
+td {
+    min-width: 120px;
+    padding: 14px 16px;
+    border-bottom: 1px solid #edf0f4;
+    vertical-align: top;
+    font-size: 0.87rem;
+    line-height: 1.45;
+}
+
+th {
+    background: #f8fafc;
+    color: #475569;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+td:first-child {
+    color: #1f2937;
+    font-weight: 700;
+}
+
+td:last-child {
+    min-width: 230px;
+}
+
+tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.estado-lista {
+    padding: 20px;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.estado-lista[hidden] {
+    display: none;
+}
+
+.rodape {
+    padding: 25px 0 8px;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.rodape span {
+    padding: 0 5px;
+}
+
+@media (max-width: 640px) {
+    body {
+        padding: 0 16px 20px;
+    }
+
+    .intro {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 34px 0 22px;
+    }
+
+    .intro h1 {
+        font-size: 1.75rem;
+    }
+
+    .botao-atualizar {
+        align-self: flex-start;
+    }
+
+    .barra-listagem {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 8px;
+        padding: 16px;
+    }
+
+    .barra-listagem input {
+        width: 100%;
+    }
+
+    .contagem {
+        margin-left: 0;
+    }
+
+    th,
+    td {
+        padding: 12px;
+    }
+}

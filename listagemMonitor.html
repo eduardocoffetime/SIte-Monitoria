@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/listagem.css">
+    <title>Monitora+ | Monitores</title>
+</head>
+<body>
+    <main class="pagina-monitores">
+        <header class="topo">
+            <a class="marca" href="monitoria.html">
+                <span class="marca-simbolo">M+</span>
+                <span>Monitora<span class="marca-destaque">+</span></span>
+            </a>
+            <a class="link-cadastro" href="cadastroMonitor.html">Cadastrar monitor <span aria-hidden="true">+</span></a>
+        </header>
+
+        <section class="intro">
+            <div>
+                <span class="sobretitulo">Equipe de monitoria</span>
+                <h1>Monitores cadastrados</h1>
+                <p>Consulte as áreas, disciplinas e horários de atendimento.</p>
+            </div>
+            <button type="button" class="botao-atualizar" id="atualizar">Atualizar lista</button>
+        </section>
+
+        <section class="painel-listagem" aria-label="Lista de monitores">
+            <div class="barra-listagem">
+                <label class="busca-label" for="busca">Buscar monitor</label>
+                <input type="search" id="busca" placeholder="Nome, área ou disciplina">
+                <span id="contagem" class="contagem">Carregando...</span>
+            </div>
+            <p id="estadoLista" class="estado-lista" role="status">Carregando monitores...</p>
+            <div class="tabela-rolagem">
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Área</th>
+                            <th scope="col">Disciplina</th>
+                            <th scope="col">Telefone</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Atendimento</th>
+                        </tr>
+                    </thead>
+                    <tbody id="linhasMonitores"></tbody>
+                </table>
+            </div>
+        </section>
+        <footer class="rodape">Monitora+ <span>·</span> Aprender em conjunto</footer>
+    </main>
+
+    <script>
+        const API_URL = 'http://10.124.75.2:8080/api/v1';
+        const CHAVE_MONITORES = 'monitora-monitores';
+        const corpoTabela = document.getElementById('linhasMonitores');
+        const estadoLista = document.getElementById('estadoLista');
+        const contagem = document.getElementById('contagem');
+        const busca = document.getElementById('busca');
+        let monitores = [];
+
+        function obterLocais() {
+            try {
+                return JSON.parse(localStorage.getItem(CHAVE_MONITORES) || '[]');
+            } catch {
+                return [];
+            }
+        }
+
+        function extrairLista(resposta) {
+            if (Array.isArray(resposta)) return resposta;
+            if (Array.isArray(resposta.content)) return resposta.content;
+            if (Array.isArray(resposta.data)) return resposta.data;
+            return [];
+        }
+
+        function formatarRelacao(valor) {
+            if (typeof valor === 'string') return valor;
+            return valor && (valor.nome || valor.descricao) || '';
+        }
+
+        function normalizar(monitor) {
+            return {
+                nome: monitor.nome || '',
+                area: formatarRelacao(monitor.area) || monitor.areaNome || '',
+                disciplina: formatarRelacao(monitor.disciplina) || monitor.disciplinaNome || monitor.materia || '',
+                telefone: monitor.telefone || monitor.telefoneMonitor || monitor.phone || '',
+                email: monitor.email || monitor.emailMonitor || '',
+                atendimento: Array.isArray(monitor.atendimento)
+                    ? monitor.atendimento.map((horario) => `${horario.dia}: ${horario.inicio} às ${horario.fim}`).join('; ')
+                    : monitor.atendimento || ''
+            };
+        }
+
+        function desenharTabela() {
+            const termo = busca.value.trim().toLocaleLowerCase('pt-BR');
+            const filtrados = monitores.filter((monitor) => Object.values(normalizar(monitor))
+                .join(' ').toLocaleLowerCase('pt-BR').includes(termo));
+            corpoTabela.replaceChildren();
+            filtrados.forEach((monitor) => {
+                const dados = normalizar(monitor);
+                const linha = document.createElement('tr');
+                [dados.nome, dados.area, dados.disciplina, dados.telefone, dados.email, dados.atendimento].forEach((valor) => {
+                    const celula = document.createElement('td');
+                    celula.textContent = valor || '—';
+                    linha.appendChild(celula);
+                });
+                corpoTabela.appendChild(linha);
+            });
+            contagem.textContent = `${filtrados.length} ${filtrados.length === 1 ? 'monitor' : 'monitores'}`;
+            estadoLista.hidden = filtrados.length > 0;
+            estadoLista.textContent = filtrados.length
+                ? ''
+                : monitores.length
+                    ? 'Nenhum monitor corresponde à busca.'
+                    : estadoLista.dataset.origem === 'local'
+                        ? 'Não foi possível carregar a lista. Verifique a conexão com o back-end.'
+                        : 'Nenhum monitor cadastrado ainda.';
+        }
+
+        async function carregarMonitores() {
+            monitores = obterLocais();
+            estadoLista.dataset.origem = 'local';
+            estadoLista.hidden = monitores.length > 0;
+            estadoLista.textContent = monitores.length ? '' : 'Carregando monitores...';
+            desenharTabela();
+            try {
+                const resposta = await fetch(`${API_URL}/monitores`, { signal: AbortSignal.timeout(8000) });
+                if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
+                const remotos = extrairLista(await resposta.json());
+                const combinados = new Map();
+                obterLocais().forEach((monitor, indice) => combinados.set(String(monitor.id || monitor.email || `local-${indice}`), monitor));
+                remotos.forEach((monitor, indice) => {
+                    const chave = String(monitor.id || monitor.email || `remoto-${indice}`);
+                    combinados.set(chave, { ...(combinados.get(chave) || {}), ...monitor });
+                });
+                monitores = [...combinados.values()];
+                estadoLista.removeAttribute('data-origem');
+            } catch (erro) {
+                console.warn('Não foi possível consultar a API de monitores:', erro);
+                monitores = obterLocais();
+                estadoLista.dataset.origem = 'local';
+            }
+            desenharTabela();
+        }
+
+        busca.addEventListener('input', desenharTabela);
+        document.getElementById('atualizar').addEventListener('click', carregarMonitores);
+        carregarMonitores();
+    </script>
+</body>
