@@ -19,3 +19,5 @@ contatos sobre o projeto:
 -eduardo.nascimento1@aluno.ifsp.edu.br
 
 -benjaminyoshida98@gmail.com
+
+https://prod.liveshare.vsengsaas.visualstudio.com/join?AAB991B1455177263BE452484D1A778B1D01
