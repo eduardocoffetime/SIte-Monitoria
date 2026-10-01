@@ -21,3 +21,4 @@ contatos sobre o projeto:
 -benjaminyoshida98@gmail.com
 
 https://prod.liveshare.vsengsaas.visualstudio.com/join?AAB991B1455177263BE452484D1A778B1D01
+https://www.figma.com/files/team/1631668425904727035/folder/594565029?fuid=1631668424394757285
