@@ -19,42 +19,57 @@
             <div id="mensagem" class="mensagem"></div>
 
             <!-- Formulário -->
-            <form id="formMonitor" class="cadastro-form">
-            
-              <!-- Disciplina -->
-            <div class="form-group">
-                <label for="nomeMonitor">área</label>
-                <input 
-                    type="text" 
-                    id="nomeArea" 
-                    name="nomeArea"
-                    placeholder="Nome da Area" required
-                    maxlength="60"
-                    minlength="3"
-                />
-            </div>
+            <form id="formDisciplina" class="cadastro-form">
 
-              <!-- área -->
-            <div class="form-group">
-                <label for="nomeMonitor">Disciplina</label>
-                <input 
-                    type="text" 
-                    id="nomeDisciplina" 
-                    name="nomeDisciplina"
-                    placeholder="Nome da Disciplina" required
-                    maxlength="60"
-                    minlength="3"
-                />
-            </div>
+                <!-- Área (dropdown) -->
+                <div class="form-group">
+                    <label for="areaDisciplina">Área<span class="required">*</span></label>
+                    <select id="areaDisciplina" name="areaDisciplina" required>
+                        <option value="">Selecionar Áreas</option>
+                        <option value="">Linguagens</option>
+                        <option value="">Matemática</option>
+                        <option value="">Ciências da Natureza</option>
+                        <option value="">Ciências Humanas</option>
+                        <option value="">Informática</option>
+                        <option value="">Mecânica</option>
+                        <option value="">Eletroeletrônica</option>
+                    </select>
+                </div>
 
-             <!-- Descrição -->
-            <div class="form-group">
-                <label for="nomeMonitor">Descrição</label>
-                <input 
-                    type="text" 
-                    id="DescricaoDisciplina" 
-                    name="DescricaoDisciplina"
-                    placeholder="Descricao da Disciplina" required
-                    maxlength="60"
-                    minlength="3"
-                />
+                <!-- Disciplina -->
+                <div class="form-group">
+                    <label for="nomeDisciplina">Disciplina<span class="required">*</span></label>
+                    <input
+                        type="text"
+                        id="nomeDisciplina"
+                        name="nomeDisciplina"
+                        placeholder="Nome da Disciplina"
+                        required
+                        maxlength="60"
+                        minlength="3"
+                    />
+                </div>
+
+                <!-- Descrição -->
+                <div class="form-group">
+                    <label for="DescricaoDisciplina">Descrição</label>
+                    <input
+                        type="text"
+                        id="DescricaoDisciplina"
+                        name="DescricaoDisciplina"
+                        placeholder="Descrição da Disciplina"
+                        required
+                        maxlength="60"
+                        minlength="0"
+                    />
+                </div>
+
+                <div class="form-actions">
+                    <button type="reset" class="btn-limpar">Limpar</button>
+                    <button type="submit" class="btn-cadastrar">Cadastrar disciplina</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
