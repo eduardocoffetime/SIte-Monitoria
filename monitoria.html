@@ -23,7 +23,7 @@
             <div>
                 <span class="sobretitulo">Encontre seu próximo encontro</span>
                 <h1>Matérias disponíveis</h1>
-                <p>Escolha uma matéria para agendar uma monitoria.</p>
+                <p>Escolha uma matéria para consultar os monitores.</p>
             </div>
             <span class="aviso-demo">Matérias demonstrativas</span>
         </section>
@@ -42,28 +42,28 @@
                     <span class="materia-tag tag-tecnica">Informatica</span>
                     <h3>Programação Web</h3>
                     <p>HTML, CSS e fundamentos de JavaScript</p>
-                    <button class="botao-agendar" type="button" data-materia="Programação Web">Agendar monitoria <span>&#8599;</span></button>
+                    <a class="link-monitores" data-materia="Programação Web" href="listagemDisciplina.html">Ver monitores <span aria-hidden="true">&#8599;</span></a>
                 </article>
                 <article class="materia-card">
                     <span class="materia-numero">T-02</span>
                     <span class="materia-tag tag-tecnica">Informatica</span>
                     <h3>Banco de Dados</h3>
                     <p>Modelagem, SQL e organização de dados</p>
-                    <button class="botao-agendar" type="button" data-materia="Banco de Dados">Agendar monitoria <span>&#8599;</span></button>
+                    <a class="link-monitores" data-materia="Banco de Dados" href="listagemDisciplina.html">Ver monitores <span aria-hidden="true">&#8599;</span></a>
                 </article>
                 <article class="materia-card">
                     <span class="materia-numero">T-03</span>
                     <span class="materia-tag tag-tecnica">Informatica</span>
                     <h3>Redes de Computadores</h3>
                     <p>Conceitos de redes, protocolos e serviços</p>
-                    <button class="botao-agendar" type="button" data-materia="Redes de Computadores">Agendar monitoria <span>&#8599;</span></button>
+                    <a class="link-monitores" data-materia="Redes de Computadores" href="listagemDisciplina.html">Ver monitores <span aria-hidden="true">&#8599;</span></a>
                 </article>
                 <article class="materia-card">
                     <span class="materia-numero">T-04</span>
                     <span class="materia-tag tag-tecnica">Informatica</span>
                     <h3>Lógica de Programação</h3>
                     <p>Algoritmos, condições e estruturas de repetição</p>
-                    <button class="botao-agendar" type="button" data-materia="Lógica de Programação">Agendar monitoria <span>&#8599;</span></button>
+                    <a class="link-monitores" data-materia="Lógica de Programação" href="listagemDisciplina.html">Ver monitores <span aria-hidden="true">&#8599;</span></a>
                 </article>
             </div>
         </section>
@@ -74,7 +74,7 @@
                     <span class="grupo-indice">02 / BASE</span>
                     <h2>Matérias comuns</h2>
                 </div>
-                <span class="grupo-contagem">04 matérias</span>
+                <span class="grupo-contagem">05 matérias</span>
             </div>
             <div class="grade-materias">
                 <article class="materia-card">
@@ -82,28 +82,35 @@
                     <span class="materia-tag tag-comum">Exatas</span>
                     <h3>Matemática</h3>
                     <p>Álgebra, funções e resolução de problemas</p>
-                    <button class="botao-agendar" type="button" data-materia="Matemática">Agendar monitoria <span>&#8599;</span></button>
+                    <a class="link-monitores" data-materia="Matemática" href="listagemDisciplina.html">Ver monitores <span aria-hidden="true">&#8599;</span></a>
                 </article>
                 <article class="materia-card">
                     <span class="materia-numero">C-02</span>
                     <span class="materia-tag tag-comum">Linguagens</span>
                     <h3>Língua Portuguesa</h3>
                     <p>Interpretação de texto e produção escrita</p>
-                    <button class="botao-agendar" type="button" data-materia="Língua Portuguesa">Agendar monitoria <span>&#8599;</span></button>
+                    <a class="link-monitores" data-materia="Língua Portuguesa" href="listagemDisciplina.html">Ver monitores <span aria-hidden="true">&#8599;</span></a>
                 </article>
                 <article class="materia-card">
                     <span class="materia-numero">C-03</span>
                     <span class="materia-tag tag-comum">Ciências</span>
                     <h3>Física</h3>
                     <p>Mecânica, energia e conceitos fundamentais</p>
-                    <button class="botao-agendar" type="button" data-materia="Física">Agendar monitoria <span>&#8599;</span></button>
+                    <a class="link-monitores" data-materia="Física" href="listagemDisciplina.html">Ver monitores <span aria-hidden="true">&#8599;</span></a>
                 </article>
                 <article class="materia-card">
                     <span class="materia-numero">C-04</span>
+                    <span class="materia-tag tag-comum">Ciências</span>
+                    <h3>Química</h3>
+                    <p>Matéria, substâncias e reações químicas</p>
+                    <a class="link-monitores" data-materia="Química" href="listagemDisciplina.html">Ver monitores <span aria-hidden="true">&#8599;</span></a>
+                </article>
+                <article class="materia-card">
+                    <span class="materia-numero">C-05</span>
                     <span class="materia-tag tag-comum">Humanas</span>
                     <h3>História</h3>
                     <p>Contextos históricos e sociedade</p>
-                    <button class="botao-agendar" type="button" data-materia="História">Agendar monitoria <span>&#8599;</span></button>
+                    <a class="link-monitores" data-materia="História" href="listagemDisciplina.html">Ver monitores <span aria-hidden="true">&#8599;</span></a>
                 </article>
             </div>
         </section>
@@ -111,61 +118,17 @@
         <footer class="rodape">Monitora+ <span>·</span> Aprender em conjunto</footer>
     </main>
 
-    <dialog class="modal-agendamento">
-        <form id="formAgendamento" class="modal-conteudo">
-            <button class="modal-fechar" type="button">&times;</button>
-            <span class="sobretitulo">Novo encontro</span>
-            <h2>Agendar monitoria</h2>
-            <p class="modal-materia" id="materiaSelecionada"></p>
-            <label for="dataAgendamento">Data</label>
-            <input id="dataAgendamento" name="data" type="date" required>
-            <label for="horaAgendamento">Horário</label>
-            <input id="horaAgendamento" name="hora" type="time" required>
-            <p class="nota-local">Este agendamento é apenas uma demonstração e não será salvo.</p>
-            <button class="botao-confirmar" type="submit">Confirmar agendamento</button>
-        </form>
-    </dialog>
-    <div class="notificacao"></div>
-   
+    <script src="assets/catalogo.js"></script>
     <script>
-        const janela = document.querySelector('.modal-agendamento');
-        const formulario = document.getElementById('formAgendamento');
-        const materia = document.getElementById('materiaSelecionada');
-        const campoData = document.getElementById('dataAgendamento');
-        const mensagem = document.querySelector('.notificacao');
-        let botaoEscolhido;
+        MonitoraCatalogo.prepararDemonstracao();
+        const disciplinas = MonitoraCatalogo.ler('disciplinas');
 
-        const hoje = new Date();
-        campoData.min = new Date(hoje.getTime() - hoje.getTimezoneOffset() * 60000)
-            .toISOString()
-            .slice(0, 10);
-
-        document.querySelectorAll('.botao-agendar').forEach((botao) => {
-            botao.addEventListener('click', () => {
-                botaoEscolhido = botao;
-                materia.textContent = botao.dataset.materia;
-                formulario.reset();
-                janela.showModal();
-            });
-        });
-
-        document.querySelector('.modal-fechar').addEventListener('click', () => janela.close());
-
-        formulario.addEventListener('submit', (envio) => {
-            envio.preventDefault();
-            const dataAgendada = new Date(`${campoData.value}T${formulario.elements.hora.value}`);
-            const dataFormatada = new Intl.DateTimeFormat('pt-BR', {
-                dateStyle: 'short',
-                timeStyle: 'short'
-            }).format(dataAgendada);
-
-            botaoEscolhido.textContent = `Agendada · ${dataFormatada}`;
-            botaoEscolhido.classList.add('agendada');
-            botaoEscolhido.disabled = true;
-            janela.close();
-            mensagem.textContent = `Monitoria de ${materia.textContent} agendada para ${dataFormatada}.`;
-            mensagem.classList.add('visivel');
-            window.setTimeout(() => mensagem.classList.remove('visivel'), 4000);
+        document.querySelectorAll('.link-monitores').forEach((link) => {
+            const disciplina = disciplinas.find((item) =>
+                item.nome.toLowerCase() === link.dataset.materia.toLowerCase());
+            if (disciplina) {
+                link.href = `listagemDisciplina.html?id=${encodeURIComponent(disciplina.id)}`;
+            }
         });
     </script>
 </body>
