@@ -64,17 +64,15 @@ body {
   top: 15px;
   left: 15px;
   z-index: 1000;
-  transition: transform 0.2s; /* Efeito suave ao passar o mouse */
+  transition: transform 0.2s; 
 }
 
-/* Controla o tamanho e comportamento da imagem */
 .btn-home-img img {
-  width: 40px;  /* Ajuste a largura como preferir */
-  height: auto; /* Mantém a proporção da imagem */
+  width: 40px;  
+  height: auto; 
   display: block;
 }
 
-/* Efeito opcional: aumenta levemente o botão ao passar o mouse */
 .btn-home-img:hover {
   transform: scale(1.1);
 }

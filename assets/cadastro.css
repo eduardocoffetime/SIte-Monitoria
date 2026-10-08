@@ -48,6 +48,26 @@ body {
     font-size: 0.98rem;
 }
 
+
+.btn-home-img {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1000;
+  transition: transform 0.2s; 
+}
+
+.btn-home-img img {
+  width: 40px;  
+  height: auto; 
+  display: block;
+}
+
+.btn-home-img:hover {
+  transform: scale(1.1);
+}
+
+
 .link-listagem {
     display: inline-block;
     margin-top: 12px;

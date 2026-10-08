@@ -72,6 +72,26 @@ input:focus-visible {
     color: #fdba74;
 }
 
+
+.btn-home-img {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1000;
+  transition: transform 0.2s; 
+}
+
+.btn-home-img img {
+  width: 40px;  
+  height: auto; 
+  display: block;
+}
+
+.btn-home-img:hover {
+  transform: scale(1.1);
+}
+
+
 .link-cadastro {
     display: inline-flex;
     align-items: center;

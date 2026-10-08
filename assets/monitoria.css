@@ -88,6 +88,26 @@ input:focus-visible {
 	color: #fff;
 }
 
+
+.btn-home-img {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1000;
+  transition: transform 0.2s; 
+}
+
+.btn-home-img img {
+  width: 40px;  
+  height: auto; 
+  display: block;
+}
+
+.btn-home-img:hover {
+  transform: scale(1.1);
+}
+
+
 .sobretitulo,
 .grupo-indice {
 	display: block;
