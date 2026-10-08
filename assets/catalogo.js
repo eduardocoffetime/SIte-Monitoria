@@ -66,3 +66,5 @@
 
     window.MonitoraCatalogo = { ler, salvar, criarId, prepararDemonstracao };
 })();
+
+alteration
