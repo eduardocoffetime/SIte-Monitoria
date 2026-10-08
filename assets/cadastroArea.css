@@ -59,6 +59,34 @@ body {
     color: #64748b;
 }
 
+.btn-home {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1000;
+  
+  /* Estilização do botão redondo */
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  width: 45px;            /* Largura fixa */
+  height: 45px;           /* Altura fixa */
+  border-radius: 50%;     /* Deixa o botão redondo */
+  
+  /* Centraliza o ícone dentro do botão */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;        /* Tamanho do ícone */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: background 0.3s;
+}
+
+.btn-home:hover {
+  background-color: #0056b3;
+}
+
+
 /* Mensagens */
 .mensagem {
     display: none;
@@ -187,6 +215,11 @@ body {
 .form-group select option {
     font-weight: 600;
     padding: 8px;
+}
+
+.required {
+    color: #e11d48;
+    margin-left: 2px;
 }
 
 @media (max-width: 480px) {

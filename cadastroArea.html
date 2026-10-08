@@ -3,12 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/cadastroDisciplina.css">
+    <link rel="stylesheet" href="assets/cadastroArea.css">
     <title>Monitora+ | Cadastro Área</title>
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <a href="guia.html" class="btn-home" aria-label="Home">
+    <i class="fa-solid fa-house"></i>
+    </a>
 </head>
 <body>
-    <div class="form-group">
-                    <label for="nomeDisciplina">Área<span class="required">*</span></label>
+    <div class="cadastroArea-container">
+        <div class="cadastroArea-card">
+            <div class="cadastroArea-header">
+                <span class="cadastro-badge">Cadastro</span>
+                <h1>Monitora+ | Cadastro Área</h1>
+                <p class="subtitle">Preencha os dados da área para cadastrá-la.</p>
+            </div>
+
+            <div id="mensagem" class="mensagem"></div>
+
+            <form id="formArea" class="cadastro-form">
+                <div class="form-group">
+                    <label for="nomeArea">Área<span class="required">*</span></label>
                     <input
                         type="text"
                         id="nomeArea"
@@ -19,8 +34,13 @@
                         minlength="3"
                     />
                 </div>
+
                 <div class="form-actions">
                     <button type="reset" class="btn-limpar">Limpar</button>
-                    <button type="submit" class="btn-cadastrar">Cadastrar disciplina</button>
+                    <button type="submit" id="btnEnviar" class="btn-cadastrar">Cadastrar área</button>
                 </div>
+            </form>
+        </div>
+    </div>
 </body>
+</html>
