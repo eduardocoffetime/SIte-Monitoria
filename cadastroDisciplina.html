@@ -28,15 +28,7 @@
                 <div class="form-group">
                     <label for="areaDisciplina">Área<span class="required">*</span></label>
                     <select id="areaDisciplina" name="areaDisciplina" required>
-                        <option value="">Selecionar Áreas</option>
-                        <option value="">Linguagens</option>
-                        <option value="">Matemática</option>
-                        <option value="">Ciências da Natureza</option>
-                        <option value="">Ciências Humanas</option>
-                        <option value="">Informática</option>
-                        <option value="">Mecânica</option>
-                        <option value="">Eletroeletrônica</option>
-                        <option value="">Mecâtronica</option>
+                        <option value="">Carregando áreas...</option>
                     </select>
                 </div>
 
@@ -62,7 +54,6 @@
                         id="DescricaoDisciplina"
                         name="DescricaoDisciplina"
                         placeholder="Descrição da Disciplina"
-                        required
                         maxlength="60"
                         minlength="0"
                     />
@@ -73,7 +64,53 @@
                     <button type="submit" class="btn-cadastrar">Cadastrar disciplina</button>
                 </div>
             </form>
+            <nav class="atalhos-cadastro" aria-label="Navegação de cadastros">
+                <a href="listagemDisciplina.html">Ver disciplinas</a>
+                <a href="cadastroArea.html">Cadastrar área</a>
+            </nav>
         </div>
     </div>
+    <script src="assets/catalogo.js"></script>
+    <script>
+        const form = document.getElementById('formDisciplina');
+        const selectArea = document.getElementById('areaDisciplina');
+        const mensagem = document.getElementById('mensagem');
+        MonitoraCatalogo.prepararDemonstracao();
+        const areas = MonitoraCatalogo.ler('areas');
+
+        selectArea.replaceChildren(new Option('Selecione uma área', ''));
+        areas.forEach((area) => selectArea.add(new Option(area.nome, area.id)));
+
+        form.addEventListener('submit', (evento) => {
+            evento.preventDefault();
+            const area = areas.find((item) => String(item.id) === selectArea.value);
+            const nome = document.getElementById('nomeDisciplina').value.trim();
+            const descricao = document.getElementById('DescricaoDisciplina').value.trim();
+            const disciplinas = MonitoraCatalogo.ler('disciplinas');
+
+            if (!area) {
+                mensagem.textContent = 'Selecione uma área cadastrada.';
+                mensagem.className = 'mensagem erro';
+                return;
+            }
+            if (disciplinas.some((disciplina) => String(disciplina.areaId) === String(area.id)
+                && disciplina.nome.toLocaleLowerCase('pt-BR') === nome.toLocaleLowerCase('pt-BR'))) {
+                mensagem.textContent = 'Essa disciplina já está cadastrada nessa área.';
+                mensagem.className = 'mensagem erro';
+                return;
+            }
+
+            disciplinas.push({ id: MonitoraCatalogo.criarId(), nome, descricao, areaId: area.id, areaNome: area.nome });
+            if (!MonitoraCatalogo.salvar('disciplinas', disciplinas)) {
+                mensagem.textContent = 'Não foi possível salvar a disciplina neste navegador.';
+                mensagem.className = 'mensagem erro';
+                return;
+            }
+
+            mensagem.textContent = `Disciplina "${nome}" cadastrada com sucesso.`;
+            mensagem.className = 'mensagem sucesso';
+            form.reset();
+        });
+    </script>
 </body>
 </html>

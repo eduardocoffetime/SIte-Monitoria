@@ -209,6 +209,24 @@ body {
     padding: 8px;
 }
 
+.atalhos-cadastro {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    margin-top: 18px;
+}
+
+.atalhos-cadastro a {
+    color: #9a3412;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.atalhos-cadastro a:hover {
+    text-decoration: underline;
+}
+
 @media (max-width: 480px) {
     .cadastroArea-header h1 {
         font-size: 22px;

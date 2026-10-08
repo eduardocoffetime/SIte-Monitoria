@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/listagem.css">
+    <title>Monitora+ | Áreas</title>
+</head>
+<body>
+    <main class="pagina-monitores">
+        <header class="topo">
+            <a class="marca" href="monitoria.html">
+                <span class="marca-simbolo">M+</span>
+                <span>Monitora<span class="marca-destaque">+</span></span>
+            </a>
+            <a class="link-cadastro" href="cadastroArea.html">Cadastrar área <span aria-hidden="true">+</span></a>
+        </header>
+        <section class="intro">
+            <div>
+                <span class="sobretitulo">Organização acadêmica</span>
+                <h1>Áreas cadastradas</h1>
+                <p>Consulte as áreas e suas disciplinas.</p>
+            </div>
+            <button type="button" class="botao-atualizar" id="atualizar">Atualizar lista</button>
+        </section>
+        <section class="painel-listagem" aria-label="Lista de áreas">
+            <div class="barra-listagem">
+                <label class="busca-label" for="busca">Buscar área</label>
+                <input type="search" id="busca" placeholder="Nome da área">
+                <span id="contagem" class="contagem"></span>
+            </div>
+            <p id="estadoLista" class="estado-lista" role="status"></p>
+            <div class="tabela-rolagem">
+                <table>
+                    <thead>
+                        <tr><th scope="col">Área</th><th scope="col">Disciplinas</th></tr>
+                    </thead>
+                    <tbody id="linhasAreas"></tbody>
+                </table>
+            </div>
+        </section>
+        <footer class="rodape">Monitora+ <span>·</span> Aprender em conjunto</footer>
+    </main>
+    <script src="assets/catalogo.js"></script>
+    <script>
+        const corpoTabela = document.getElementById('linhasAreas');
+        const busca = document.getElementById('busca');
+        const estadoLista = document.getElementById('estadoLista');
+        const contagem = document.getElementById('contagem');
+
+        function desenharLista() {
+            const termo = busca.value.trim().toLocaleLowerCase('pt-BR');
+            const disciplinas = MonitoraCatalogo.ler('disciplinas');
+            const areas = MonitoraCatalogo.ler('areas').filter((area) => area.nome.toLocaleLowerCase('pt-BR').includes(termo));
+            corpoTabela.replaceChildren();
+            areas.forEach((area) => {
+                const vinculadas = disciplinas.filter((disciplina) => String(disciplina.areaId) === String(area.id)
+                    || disciplina.areaNome === area.nome);
+                const linha = document.createElement('tr');
+                const nome = document.createElement('td');
+                const quantidade = document.createElement('td');
+                nome.textContent = area.nome;
+                quantidade.textContent = `${vinculadas.length} ${vinculadas.length === 1 ? 'disciplina' : 'disciplinas'}`;
+                linha.append(nome, quantidade);
+                corpoTabela.appendChild(linha);
+            });
+            contagem.textContent = `${areas.length} ${areas.length === 1 ? 'área' : 'áreas'}`;
+            estadoLista.hidden = areas.length > 0;
+            estadoLista.textContent = MonitoraCatalogo.ler('areas').length
+                ? 'Nenhuma área corresponde à busca.'
+                : 'Nenhuma área cadastrada ainda.';
+        }
+
+        busca.addEventListener('input', desenharLista);
+        document.getElementById('atualizar').addEventListener('click', desenharLista);
+        desenharLista();
+    </script>
+</body>
+</html>

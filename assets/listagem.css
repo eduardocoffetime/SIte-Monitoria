@@ -242,6 +242,34 @@ tbody tr:last-child td {
     display: none;
 }
 
+.barra-listagem[hidden],
+.botao-atualizar[hidden],
+.voltar-listagem[hidden] {
+    display: none;
+}
+
+.link-disciplina {
+    color: #c2410c;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.link-disciplina:hover,
+.voltar-listagem a:hover {
+    text-decoration: underline;
+}
+
+.voltar-listagem {
+    padding-top: 16px;
+}
+
+.voltar-listagem a {
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
 .rodape {
     padding: 25px 0 8px;
     color: rgba(255, 255, 255, 0.72);

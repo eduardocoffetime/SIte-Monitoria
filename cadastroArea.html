@@ -5,41 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/cadastroArea.css">
     <title>Monitora+ | Cadastro Área</title>
-    <a href="guia.html" class="btn-home-img">
-    <img src="img\home.png" alt="Home">
-    </a>
 </head>
 <body>
+    <a href="guia.html" class="btn-home-img" aria-label="Voltar para a página inicial">
+        <img src="img/home.png" alt="">
+    </a>
     <div class="cadastroArea-container">
         <div class="cadastroArea-card">
             <div class="cadastroArea-header">
                 <span class="cadastro-badge">Cadastro</span>
                 <h1>Monitora+ | Cadastro Área</h1>
-                <p class="subtitle">Preencha os dados da área para cadastrá-la.</p>
+                <p class="subtitle">Cadastre uma área para organizar as disciplinas.</p>
             </div>
-
-            <div id="mensagem" class="mensagem"></div>
-
+            <div id="mensagem" class="mensagem" role="status"></div>
             <form id="formArea" class="cadastro-form">
                 <div class="form-group">
-                    <label for="nomeArea">Área<span class="required">*</span></label>
-                    <input
-                        type="text"
-                        id="nomeArea"
-                        name="nomeArea"
-                        placeholder="Nome da Área"
-                        required
-                        maxlength="60"
-                        minlength="3"
-                    />
+                    <label for="nomeArea">Nome da área<span class="required">*</span></label>
+                    <input type="text" id="nomeArea" name="nomeArea" placeholder="Ex.: Informática" required maxlength="60" minlength="3">
                 </div>
-
                 <div class="form-actions">
                     <button type="reset" class="btn-limpar">Limpar</button>
-                    <button type="submit" id="btnEnviar" class="btn-cadastrar">Cadastrar área</button>
+                    <button type="submit" class="btn-cadastrar">Cadastrar área</button>
                 </div>
             </form>
+            <nav class="atalhos-cadastro" aria-label="Navegação de cadastros">
+                <a href="listagemArea.html">Ver áreas</a>
+                <a href="cadastroDisciplina.html">Cadastrar disciplina</a>
+            </nav>
         </div>
     </div>
+    <script src="assets/catalogo.js"></script>
+    <script>
+        const form = document.getElementById('formArea');
+        const mensagem = document.getElementById('mensagem');
+
+        form.addEventListener('submit', (evento) => {
+            evento.preventDefault();
+            const nome = document.getElementById('nomeArea').value.trim();
+            const areas = MonitoraCatalogo.ler('areas');
+            if (areas.some((area) => area.nome.toLocaleLowerCase('pt-BR') === nome.toLocaleLowerCase('pt-BR'))) {
+                mensagem.textContent = 'Já existe uma área com esse nome.';
+                mensagem.className = 'mensagem erro';
+                return;
+            }
+
+            areas.push({ id: MonitoraCatalogo.criarId(), nome });
+            if (!MonitoraCatalogo.salvar('areas', areas)) {
+                mensagem.textContent = 'Não foi possível salvar a área neste navegador.';
+                mensagem.className = 'mensagem erro';
+                return;
+            }
+
+            mensagem.textContent = `Área "${nome}" cadastrada com sucesso.`;
+            mensagem.className = 'mensagem sucesso';
+            form.reset();
+        });
+    </script>
 </body>
-</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/listagem.css">
+    <title>Monitora+ | Disciplinas</title>
+</head>
+<body>
+    <main class="pagina-monitores">
+        <header class="topo">
+            <a class="marca" href="monitoria.html">
+                <span class="marca-simbolo">M+</span>
+                <span>Monitora<span class="marca-destaque">+</span></span>
+            </a>
+            <a class="link-cadastro" href="cadastroDisciplina.html">Cadastrar disciplina <span aria-hidden="true">+</span></a>
+        </header>
+        <section class="intro">
+            <div>
+                <span class="sobretitulo" id="sobretitulo">Organização acadêmica</span>
+                <h1 id="titulo">Disciplinas cadastradas</h1>
+                <p id="descricaoPagina">Selecione uma disciplina para consultar seus monitores.</p>
+            </div>
+            <button type="button" class="botao-atualizar" id="atualizar">Atualizar lista</button>
+        </section>
+        <section class="painel-listagem" aria-label="Disciplinas e monitores">
+            <div class="barra-listagem" id="barraBusca">
+                <label class="busca-label" for="busca">Buscar disciplina</label>
+                <input type="search" id="busca" placeholder="Nome, descrição ou área">
+                <span id="contagem" class="contagem"></span>
+            </div>
+            <p id="estadoLista" class="estado-lista" role="status"></p>
+            <div class="tabela-rolagem">
+                <table>
+                    <thead id="cabecalhoTabela"></thead>
+                    <tbody id="linhasLista"></tbody>
+                </table>
+            </div>
+        </section>
+        <p class="voltar-listagem" id="voltar" hidden><a href="listagemDisciplina.html">Voltar para todas as disciplinas</a></p>
+        <footer class="rodape">Monitora+ <span>·</span> Aprender em conjunto</footer>
+    </main>
+    <script src="assets/catalogo.js"></script>
+    <script>
+        const API_URL = 'http://10.124.75.2:8080/api/v1';
+        const corpoTabela = document.getElementById('linhasLista');
+        const cabecalhoTabela = document.getElementById('cabecalhoTabela');
+        const estadoLista = document.getElementById('estadoLista');
+        const contagem = document.getElementById('contagem');
+        const busca = document.getElementById('busca');
+        const idSelecionado = new URLSearchParams(window.location.search).get('id');
+        const disciplinaSelecionada = MonitoraCatalogo.ler('disciplinas')
+            .find((disciplina) => String(disciplina.id) === idSelecionado);
+        let monitores = MonitoraCatalogo.ler('monitores');
+
+        function normalizarTexto(valor) {
+            return String(valor || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('pt-BR');
+        }
+
+        function nomeRelacao(valor) {
+            if (typeof valor === 'string') return valor;
+            return valor && (valor.nome || valor.name || valor.descricao) || '';
+        }
+
+        function extrairLista(resposta) {
+            if (Array.isArray(resposta)) return resposta;
+            if (Array.isArray(resposta.content)) return resposta.content;
+            if (Array.isArray(resposta.data)) return resposta.data;
+            return [];
+        }
+
+        function tabelaVazia(celulas) {
+            cabecalhoTabela.replaceChildren();
+            const linha = document.createElement('tr');
+            celulas.forEach((texto) => {
+                const celula = document.createElement('th');
+                celula.scope = 'col';
+                celula.textContent = texto;
+                linha.appendChild(celula);
+            });
+            cabecalhoTabela.appendChild(linha);
+        }
+
+        function desenharDisciplinas() {
+            const termo = normalizarTexto(busca.value.trim());
+            const disciplinas = MonitoraCatalogo.ler('disciplinas').filter((disciplina) =>
+                normalizarTexto(`${disciplina.nome} ${disciplina.areaNome} ${disciplina.descricao}`).includes(termo));
+            tabelaVazia(['Disciplina', 'Área', 'Descrição']);
+            corpoTabela.replaceChildren();
+            disciplinas.forEach((disciplina) => {
+                const linha = document.createElement('tr');
+                const nome = document.createElement('td');
+                const link = document.createElement('a');
+                link.className = 'link-disciplina';
+                link.href = `listagemDisciplina.html?id=${encodeURIComponent(disciplina.id)}`;
+                link.textContent = disciplina.nome;
+                nome.appendChild(link);
+                [nome, disciplina.areaNome || '', disciplina.descricao || '—'].forEach((valor) => {
+                    const celula = valor instanceof HTMLElement ? valor : document.createElement('td');
+                    if (!(valor instanceof HTMLElement)) celula.textContent = valor;
+                    linha.appendChild(celula);
+                });
+                corpoTabela.appendChild(linha);
+            });
+            contagem.textContent = `${disciplinas.length} ${disciplinas.length === 1 ? 'disciplina' : 'disciplinas'}`;
+            estadoLista.hidden = disciplinas.length > 0;
+            estadoLista.textContent = MonitoraCatalogo.ler('disciplinas').length
+                ? 'Nenhuma disciplina corresponde à busca.'
+                : 'Nenhuma disciplina cadastrada ainda.';
+        }
+
+        function desenharMonitores() {
+            const disciplina = disciplinaSelecionada;
+            document.getElementById('sobretitulo').textContent = disciplina.areaNome || 'Disciplina';
+            document.getElementById('titulo').textContent = disciplina.nome;
+            document.getElementById('descricaoPagina').textContent = disciplina.descricao || 'Monitores vinculados a esta disciplina.';
+            document.getElementById('barraBusca').hidden = true;
+            document.getElementById('voltar').hidden = false;
+            document.getElementById('atualizar').hidden = false;
+            tabelaVazia(['Monitor', 'Email', 'Telefone', 'Atendimento']);
+
+            const filtrados = monitores.filter((monitor) => {
+                const nomeDisciplina = nomeRelacao(monitor.disciplina) || monitor.disciplinaNome || monitor.materia;
+                const idDisciplina = monitor.disciplinaId || (monitor.disciplina && monitor.disciplina.id);
+                const nomeArea = nomeRelacao(monitor.area) || monitor.areaNome;
+                const idCoincide = idDisciplina != null && String(idDisciplina) === String(disciplina.id);
+                const nomeCoincide = normalizarTexto(nomeDisciplina) === normalizarTexto(disciplina.nome)
+                    && (!nomeArea || normalizarTexto(nomeArea) === normalizarTexto(disciplina.areaNome));
+                return idCoincide || nomeCoincide;
+            });
+
+            corpoTabela.replaceChildren();
+            filtrados.forEach((monitor) => {
+                const linha = document.createElement('tr');
+                [monitor.nome || '', monitor.email || '', monitor.telefone || monitor.telefoneMonitor || '', monitor.atendimento || ''].forEach((valor) => {
+                    const celula = document.createElement('td');
+                    celula.textContent = valor || '—';
+                    linha.appendChild(celula);
+                });
+                corpoTabela.appendChild(linha);
+            });
+            contagem.textContent = `${filtrados.length} ${filtrados.length === 1 ? 'monitor' : 'monitores'}`;
+            estadoLista.hidden = filtrados.length > 0;
+            estadoLista.textContent = filtrados.length ? '' : 'Nenhum monitor cadastrado para esta disciplina.';
+        }
+
+        async function carregar() {
+            if (!disciplinaSelecionada) {
+                document.getElementById('atualizar').hidden = true;
+                desenharDisciplinas();
+                return;
+            }
+            desenharMonitores();
+            try {
+                const resposta = await fetch(`${API_URL}/monitores`, { signal: AbortSignal.timeout(5000) });
+                if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
+                const locais = MonitoraCatalogo.ler('monitores');
+                const combinados = new Map(locais.map((monitor, indice) => [
+                    String(monitor.email || monitor.id || `local-${indice}`).toLocaleLowerCase('pt-BR'),
+                    monitor
+                ]));
+                extrairLista(await resposta.json()).forEach((monitor, indice) => {
+                    const chave = String(monitor.email || monitor.id || `remoto-${indice}`).toLocaleLowerCase('pt-BR');
+                    combinados.set(chave, { ...(combinados.get(chave) || {}), ...monitor });
+                });
+                monitores = [...combinados.values()];
+                desenharMonitores();
+            } catch (erro) {
+                console.warn('Não foi possível consultar monitores na API:', erro);
+            }
+        }
+
+        busca.addEventListener('input', desenharDisciplinas);
+        document.getElementById('atualizar').addEventListener('click', carregar);
+        carregar();
+    </script>
+</body>
+</html>
