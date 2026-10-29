@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro de Campus IFSP</title>
+    <link rel="stylesheet" href="cadastroCampus.css" />
+  </head>
+  <body>
+    <div class="caixa">
+      <h1>Cadastro de Campus</h1>
+
+      <form id="campusForm">
+        <label>
+          Nome do campus
+          <input id="nomeCampus" type="text" placeholder="Ex: Campus São Paulo" />
+        </label>
+
+        <label>
+          Cidade
+          <input id="cidade" type="text" placeholder="Ex: São Paulo" />
+        </label>
+
+        <label>
+          CNPJ
+          <input id="cnpj" type="text" placeholder="00.000.000/0000-00" maxlength="18" />
+        </label>
+
+        <div class="linha">
+          <div>
+            <label>Tipo</label>
+            <input id="tipoUnidade" type="text" value="Aguardando CNPJ" readonly />
+          </div>
+
+          <div>
+            <label>Identificador</label>
+            <input id="identificador" type="text" value="—" readonly />
+          </div>
+        </div>
+
+        <p id="statusMessage" class="status">Digite um CNPJ do IFSP para validar.</p>
+
+        <button type="submit">Salvar</button>
+      </form>
+    </div>
+
+    <script src="cadastroCampus.js"></script>
+  </body>
+</html>
